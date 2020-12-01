@@ -119,8 +119,12 @@ async function text_search(query: string, esUrl: string) {
                 .forEach((matched) => {
 
                     const filePath = matched._source.filePath.dir + "/" + matched._source.filePath.base;
-                    console.log("%%% " + counter++ + " : " + filePath);
+                    console.log("% --- " + counter++ + " : " + filePath);
+                    const title = get_title(matched._source.text);
+                    console.log("%% title");
+                    console.log(title);
                     console.log();
+                    console.log("%% text");
                     console.log(matched.highlight.text.join(""));
                     console.log();
                 });
@@ -133,6 +137,18 @@ async function text_search(query: string, esUrl: string) {
 }
 
 
+function get_title(data: string): string {
+
+    const lines = data.split("\n");
+
+    let i = 0;
+    for (i = 0; i < lines.length; i++) {
+        if (lines[i].match(/^#.+/)) {
+            return lines[i];
+        }
+    }
+    return "NOT-FOUND";
+}
 
 
 
